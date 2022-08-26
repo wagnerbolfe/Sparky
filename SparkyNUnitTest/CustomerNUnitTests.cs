@@ -6,7 +6,7 @@ namespace Sparky
     [TestFixture]
     public class CustomerNUnitTests
     {
-        private Customer customer;
+        private Customer? customer;
 
         [SetUp]
         public void Setup()
@@ -20,7 +20,7 @@ namespace Sparky
             //Arrange
 
             //Act
-            customer.GreetAndCombineNames("Ben", "Spark");
+            customer!.GreetAndCombineNames("Ben", "Spark");
 
             Assert.Multiple(() =>
             {
@@ -45,20 +45,20 @@ namespace Sparky
             //Act
 
             //Assert
-            Assert.IsNull(customer.GreetMessage);
+            Assert.IsNull(customer!.GreetMessage);
         }
 
         [Test]
         public void DiscountCheck_DefaultCustomer_ReturnsDiscountInRange()
         {
-            int result = customer.Discount;
+            int result = customer!.Discount;
             Assert.That(result, Is.InRange(10, 25));
         }
 
         [Test]
         public void GreetMessage_GreetedWithoutLastName_ReturnsNotNull()
         {
-            customer.GreetAndCombineNames("ben", "");
+            customer!.GreetAndCombineNames("ben", "");
 
             Assert.IsNotNull(customer.GreetMessage);
             Assert.IsFalse(string.IsNullOrEmpty(customer.GreetMessage));
@@ -67,22 +67,22 @@ namespace Sparky
         [Test]
         public void GreetChecker_EmptyFirstName_ThrowsException()
         {
-            var exceptionDetails = Assert.Throws<ArgumentException>(() => customer.GreetAndCombineNames("", "Spark"));
-            Assert.AreEqual("Empty First Name", exceptionDetails.Message);
+            var exceptionDetails = Assert.Throws<ArgumentException>(() => customer!.GreetAndCombineNames("", "Spark"));
+            Assert.AreEqual("Empty First Name", exceptionDetails!.Message);
 
-            Assert.That(() => customer.GreetAndCombineNames("", "spark"),
+            Assert.That(() => customer!.GreetAndCombineNames("", "spark"),
                 Throws.ArgumentException.With.Message.EqualTo("Empty First Name"));
 
-            Assert.Throws<ArgumentException>(() => customer.GreetAndCombineNames("", "Spark"));
+            Assert.Throws<ArgumentException>(() => customer!.GreetAndCombineNames("", "Spark"));
 
-            Assert.That(() => customer.GreetAndCombineNames("", "spark"), Throws.ArgumentException);
+            Assert.That(() => customer!.GreetAndCombineNames("", "spark"), Throws.ArgumentException);
 
         }
 
         [Test]
         public void CustomerType_CreateCustomerWithLessThan100Order_ReturnBasicCustomer()
         {
-            customer.OrderTotal = 10;
+            customer!.OrderTotal = 10;
             var result = customer.GetCustomerDetails();
             Assert.That(result, Is.TypeOf<BasicCustomer>());
         }
@@ -90,7 +90,7 @@ namespace Sparky
         [Test]
         public void CustomerType_CreateCustomerWithMoreThan100Order_ReturnBasicCustomer()
         {
-            customer.OrderTotal = 110;
+            customer!.OrderTotal = 110;
             var result = customer.GetCustomerDetails();
             Assert.That(result, Is.TypeOf<PlatinumCustomer>());
         }
