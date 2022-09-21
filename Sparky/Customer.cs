@@ -1,21 +1,36 @@
-﻿namespace Sparky
+﻿using static Sparky.Customer;
+
+namespace Sparky
 {
-    public class Customer
+    public interface ICustomer
     {
-        public int Discount = 20;
-
+        int Discount { get; set; }
+        int OrderTotal { get; set; }
+        string GreetMessage { get; set; }
+        bool IsPlatinum { get; set; }
+        string GreetAndCombineNames(string firstName, string lastName);
+        CustomerType GetCustomerDetails();
+    }
+    public class Customer : ICustomer
+    {
+        public int Discount { get; set; }
         public int OrderTotal { get; set; }
+        public string GreetMessage { get; set; }
+        public bool IsPlatinum { get; set; }
+        public Customer()
+        {
+            Discount = 15;
+            IsPlatinum = false;
+        }
 
-        public string? GreetMessage { get; set; }
-
-        public string GreetAndCombineNames(string firstName, string lastName)
+        public string GreetAndCombineNames(string firstName, string LastName)
         {
             if (string.IsNullOrWhiteSpace(firstName))
             {
                 throw new ArgumentException("Empty First Name");
             }
 
-            GreetMessage = $"Hello, {firstName} {lastName}";
+            GreetMessage = $"Hello, {firstName} {LastName}";
             Discount = 20;
             return GreetMessage;
         }
@@ -28,10 +43,8 @@
             }
             return new PlatinumCustomer();
         }
-
-        public class CustomerType { }
-        public class BasicCustomer : CustomerType { }
-        public class PlatinumCustomer : CustomerType { }
     }
-
+    public class CustomerType { }
+    public class BasicCustomer : CustomerType { }
+    public class PlatinumCustomer : CustomerType { }
 }
